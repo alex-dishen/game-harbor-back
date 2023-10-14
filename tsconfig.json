@@ -1,20 +1,21 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "moduleResolution": "node",
-    "rootDir": "src",
-    "target": "es5",
-    "allowJs": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
+    "module": "commonjs",
     "declaration": true,
-    "declarationMap": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false
+  }
 }
