@@ -1,0 +1,16 @@
+version: '3.8'
+
+volumes:
+  data-volume:
+
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - data-volume:/var/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: game-harbor
+    ports:
+      - '5434:5432'

@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid()) @db.Uuid
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  email      String   @unique
+  password   String
+  firstName  String
+  lastName   String
+
+  games UserGames[]
+
+  @@map("users")
+}
+
+model Game {
+  id               String   @id @default(uuid()) @db.Uuid
+  name             String
+  background_image String
+  description_raw  String
+  released         DateTime
+  developers       String[]
+  publishers       String[]
+  website          String
+  created_at       DateTime
+
+  users     UserGames[]
+  genres    GameGenres[]
+  platforms GamePlatforms[]
+
+  @@map("games")
+}
+
+model Platform {
+  id   String @id @default(uuid()) @db.Uuid
+  name String
+  slug String
+
+  game_platofmrs GamePlatforms[]
+
+  @@map("platforms")
+}
+
+model Genre {
+  id   String @id @default(uuid()) @db.Uuid
+  name String
+
+  game_genres GameGenres[]
+
+  @@map("genres")
+}
+
+model UserGames {
+  game_id String @db.Uuid
+  user_id String @db.Uuid
+
+  user User @relation(fields: [user_id], references: [id])
+  game Game @relation(fields: [game_id], references: [id])
+
+  @@id([user_id, game_id])
+  @@map("user_games")
+}
+
+model GameGenres {
+  game_id  String @db.Uuid
+  genre_id String @db.Uuid
+
+  game  Game  @relation(fields: [game_id], references: [id])
+  genre Genre @relation(fields: [genre_id], references: [id])
+
+  @@id([game_id, genre_id])
+  @@map("game_genres")
+}
+
+model GamePlatforms {
+  game_id     String @db.Uuid
+  platform_id String @db.Uuid
+
+  game  Game     @relation(fields: [game_id], references: [id])
+  genre Platform @relation(fields: [platform_id], references: [id])
+
+  @@id([game_id, platform_id])
+  @@map("game_platforms")
+}
