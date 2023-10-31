@@ -6,11 +6,13 @@ import { PrismaService } from 'src/shared/prisma/prisma.service';
 export class GamesRepository {
   constructor(private prisma: PrismaService) {}
 
-  getAll(where: Prisma.GameWhereInput) {
-    return this.prisma.game.findMany({ where });
+  getAll() {
+    return this.prisma.game.findMany({
+      include: { platforms: true, genres: true },
+    });
   }
 
-  get(where: Prisma.GameWhereUniqueInput) {
+  getById(where: Prisma.GameWhereUniqueInput) {
     return this.prisma.game.findUnique({ where });
   }
 
