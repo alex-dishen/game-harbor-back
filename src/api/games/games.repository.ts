@@ -17,7 +17,10 @@ export class GamesRepository {
   }
 
   create(data: Prisma.GameCreateInput) {
-    return this.prisma.game.create({ data });
+    return this.prisma.game.create({
+      data,
+      include: { platforms: true, genres: true },
+    });
   }
 
   delete(where: Prisma.GameWhereUniqueInput) {

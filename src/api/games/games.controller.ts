@@ -2,15 +2,11 @@ import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GamesService } from './games.service';
 import { CreateGameDto, GameDto } from './dto';
-import { PrismaService } from 'src/shared/prisma/prisma.service';
 
 @ApiTags('Games')
 @Controller('games')
 export class GamesController {
-  constructor(
-    private games: GamesService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private games: GamesService) {}
 
   @ApiOperation({ summary: 'Get all games' })
   @ApiResponse({ status: 200, type: [GameDto] })
@@ -26,8 +22,6 @@ export class GamesController {
   @ApiOperation({ summary: 'Create a new game' })
   @Post('/create')
   createGame(@Body() data: CreateGameDto) {
-    console.log(data);
-
     return this.games.createGame(data);
   }
 

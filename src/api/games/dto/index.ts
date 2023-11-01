@@ -61,7 +61,12 @@ export class GameDto {
 }
 
 export class CreateGameDto extends OmitType(GameDto, ['platforms', 'genres']) {
-  @ApiProperty({ example: '3bbcc041-775e-4053-a509-6b5f763f3624' })
-  @IsString()
-  platformId: string;
+  @ApiProperty({
+    example: [
+      '117c81cd-7132-4e67-b969-6d9a3e2d05df',
+      '652d302f-c5f5-4944-87a0-9b64bb3f18e5',
+    ],
+  })
+  @IsArray()
+  platformId: string[];
 }

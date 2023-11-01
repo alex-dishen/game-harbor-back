@@ -1,7 +1,6 @@
 import { CreateGameDto } from './dto';
 import { GamesRepository } from './games.repository';
 import { Injectable } from '@nestjs/common';
-// import { GameDto } from './dto';
 
 @Injectable()
 export class GamesService {
@@ -16,7 +15,14 @@ export class GamesService {
   }
 
   createGame(data: CreateGameDto) {
-    return this.gamesRepository.create(data);
+    const { platformId, ...restData } = data;
+
+    return this.gamesRepository.create({
+      ...restData,
+      platforms: {
+        create: platformId.map((id) => ({ platform: { connect: { id } } })),
+      },
+    });
   }
 
   deleteGame(id: string) {
