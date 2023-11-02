@@ -47,7 +47,7 @@ export class GameDto {
     ],
   })
   @IsArray()
-  platforms: [{ slug: string } & IdNameDto];
+  platforms: { slug: string }[] & IdNameDto[];
 
   @ApiProperty({
     example: [{ id: 'b86fa12a-76fc-46f5-8a3e-bf39e7be4c4e', name: 'Action' }],
@@ -60,7 +60,11 @@ export class GameDto {
   website: string;
 }
 
-export class CreateGameDto extends OmitType(GameDto, ['platforms', 'genres']) {
+export class CreateGameDto extends OmitType(GameDto, [
+  'id',
+  'platforms',
+  'genres',
+]) {
   @ApiProperty({
     example: [
       '117c81cd-7132-4e67-b969-6d9a3e2d05df',
@@ -68,5 +72,11 @@ export class CreateGameDto extends OmitType(GameDto, ['platforms', 'genres']) {
     ],
   })
   @IsArray()
-  platformId: string[];
+  platformIds: string[];
+
+  @ApiProperty({
+    example: [],
+  })
+  @IsArray()
+  genreIds: string[];
 }

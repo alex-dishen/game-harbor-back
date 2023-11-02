@@ -1,26 +1,37 @@
-import { CreateGameDto } from './dto';
-import { GamesRepository } from './games.repository';
 import { Injectable } from '@nestjs/common';
+import { GamesRepository } from 'src/api/games/games.repository';
+import { GamesMapper } from 'src/api/games/mapper';
+import { CreateGameDto } from 'src/api/games/dto';
 
 @Injectable()
 export class GamesService {
-  constructor(private gamesRepository: GamesRepository) {}
+  constructor(
+    private gamesRepository: GamesRepository,
+    private gamesMapper: GamesMapper,
+  ) {}
 
-  getAll() {
-    return this.gamesRepository.getAll();
+  async getAll() {
+    const games = await this.gamesRepository.getAll();
+
+    return this.gamesMapper.toArrayDto(games);
   }
 
-  getById(id: string) {
-    return this.gamesRepository.getById({ id });
+  async getById(id: string) {
+    const game = await this.gamesRepository.getById({ id });
+
+    return this.gamesMapper.toDto(game);
   }
 
   createGame(data: CreateGameDto) {
-    const { platformId, ...restData } = data;
+    const { platformIds, genreIds, ...restData } = data;
 
     return this.gamesRepository.create({
       ...restData,
       platforms: {
-        create: platformId.map((id) => ({ platform: { connect: { id } } })),
+        create: platformIds.map((id) => ({ platform: { connect: { id } } })),
+      },
+      genres: {
+        create: genreIds.map((id) => ({ genre: { connect: { id } } })),
       },
     });
   }

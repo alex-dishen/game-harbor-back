@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GamesService } from './games.service';
-import { CreateGameDto, GameDto } from './dto';
+import { GamesService } from 'src/api/games/games.service';
+import { CreateGameDto, GameDto } from 'src/api/games/dto';
 
 @ApiTags('Games')
 @Controller('games')
@@ -17,7 +17,9 @@ export class GamesController {
 
   @ApiOperation({ summary: 'Get a single game' })
   @Get('/:id')
-  getGame() {}
+  getGame(@Param('id') id: string) {
+    return this.games.getById(id);
+  }
 
   @ApiOperation({ summary: 'Create a new game' })
   @Post('/create')
@@ -26,6 +28,8 @@ export class GamesController {
   }
 
   @ApiOperation({ summary: 'Delete a game' })
-  @Delete('/delete')
-  deleteGame() {}
+  @Delete('/delete/:id')
+  deleteGame(@Param('id') id: string) {
+    return this.games.deleteGame(id);
+  }
 }

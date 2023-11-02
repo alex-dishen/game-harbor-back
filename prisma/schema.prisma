@@ -26,7 +26,7 @@ model Game {
   name             String
   background_image String
   description_raw  String
-  released         DateTime
+  released         String
   developers       String[]
   publishers       String[]
   website          String

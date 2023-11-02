@@ -17,7 +17,7 @@ CREATE TABLE "games" (
     "name" TEXT NOT NULL,
     "background_image" TEXT NOT NULL,
     "description_raw" TEXT NOT NULL,
-    "released" TIMESTAMP(3) NOT NULL,
+    "released" TEXT NOT NULL,
     "developers" TEXT[],
     "publishers" TEXT[],
     "website" TEXT NOT NULL,
