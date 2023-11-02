@@ -1,29 +1,16 @@
 import { PrismaClient } from '@prisma/client';
 import { genres, platforms } from './seed-data';
+import { seedData } from './helpers';
+import { seedGame } from './seeds';
 
 const prisma = new PrismaClient();
 
-const seedData = <T extends { id: string }>(
-  data: T[],
-  model: keyof PrismaClient,
-) => {
-  const modelName = model as string;
-
-  return Promise.all(
-    data.map((item) =>
-      prisma[modelName].upsert({
-        where: { id: item.id },
-        update: item,
-        create: item,
-      }),
-    ),
-  );
-};
-
 async function main() {
-  await seedData(genres, 'genre');
+  await seedData(prisma, 'genre', genres);
 
-  await seedData(platforms, 'platform');
+  await seedData(prisma, 'platform', platforms);
+
+  await seedGame(prisma);
 }
 
 main()

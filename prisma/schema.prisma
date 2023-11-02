@@ -26,11 +26,11 @@ model Game {
   name             String
   background_image String
   description_raw  String
-  released         DateTime
+  released         String
   developers       String[]
   publishers       String[]
   website          String
-  created_at       DateTime
+  created_at       DateTime @default(now())
 
   users     UserGames[]
   genres    GameGenres[]
@@ -44,7 +44,7 @@ model Platform {
   name String
   slug String
 
-  game_platofmrs GamePlatforms[]
+  games GamePlatforms[]
 
   @@map("platforms")
 }
@@ -59,34 +59,37 @@ model Genre {
 }
 
 model UserGames {
+  id      String @id @default(uuid()) @db.Uuid
   game_id String @db.Uuid
   user_id String @db.Uuid
 
   user User @relation(fields: [user_id], references: [id])
   game Game @relation(fields: [game_id], references: [id])
 
-  @@id([user_id, game_id])
+  @@unique([user_id, game_id])
   @@map("user_games")
 }
 
 model GameGenres {
+  id       String @id @default(uuid()) @db.Uuid
   game_id  String @db.Uuid
   genre_id String @db.Uuid
 
   game  Game  @relation(fields: [game_id], references: [id])
   genre Genre @relation(fields: [genre_id], references: [id])
 
-  @@id([game_id, genre_id])
+  @@unique([game_id, genre_id])
   @@map("game_genres")
 }
 
 model GamePlatforms {
+  id          String @id @default(uuid()) @db.Uuid
   game_id     String @db.Uuid
   platform_id String @db.Uuid
 
-  game  Game     @relation(fields: [game_id], references: [id])
-  genre Platform @relation(fields: [platform_id], references: [id])
+  game     Game     @relation(fields: [game_id], references: [id])
+  platform Platform @relation(fields: [platform_id], references: [id])
 
-  @@id([game_id, platform_id])
+  @@unique([game_id, platform_id])
   @@map("game_platforms")
 }
