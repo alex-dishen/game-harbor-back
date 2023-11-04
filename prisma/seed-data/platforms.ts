@@ -12,7 +12,7 @@ export const platforms = [
   {
     id: '117c81cd-7132-4e67-b969-6d9a3e2d05df',
     name: 'PlayStation',
-    slug: 'playStation',
+    slug: 'playstation',
   },
   {
     id: 'ac7edf85-45fa-47f9-ab52-3aaf09f91981',

@@ -1,5 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { IsArray, IsString, IsUUID, IsUrl } from 'class-validator';
+import { IsArray, IsOptional, IsString, IsUUID, IsUrl } from 'class-validator';
 import { IdNameDto } from 'src/shared/dto';
 
 export class GameDto {
@@ -29,40 +29,52 @@ export class GameDto {
   @IsString()
   released: string;
 
-  @ApiProperty({ example: ['Luminous Productions'] })
+  @ApiProperty({
+    example: [
+      {
+        id: '2474a226-ac3b-4b2f-a79c-70da86885af2',
+        name: 'Luminous Productions',
+      },
+    ],
+  })
   @IsArray()
-  developers: string[];
+  developers: IdNameDto[];
 
-  @ApiProperty({ example: ['Square Enix'] })
+  @ApiProperty({
+    example: [
+      { id: '95d74c6b-5644-4dc5-8f08-fec05643703f', name: 'Square Enix' },
+    ],
+  })
   @IsArray()
-  publishers: string[];
+  publishers: IdNameDto[];
 
   @ApiProperty({
     example: [
       {
-        id: 'b86fa12a-76fc-46f5-8a3e-bf39e7be4c4e',
+        id: '117c81cd-7132-4e67-b969-6d9a3e2d05df',
         name: 'Play Station',
         slug: 'play station',
       },
     ],
   })
   @IsArray()
-  platforms: { slug: string }[] & IdNameDto[];
+  parent_platforms: { slug: string }[] & IdNameDto[];
 
   @ApiProperty({
-    example: [{ id: 'b86fa12a-76fc-46f5-8a3e-bf39e7be4c4e', name: 'Action' }],
+    example: [{ id: '1f556ab5-4b96-4c1f-a38b-95b7545efa67', name: 'Action' }],
   })
   @IsArray()
   genres: IdNameDto[];
 
   @ApiProperty({ example: 'https://forspoken.square-enix-games.com/en-us/' })
   @IsUrl()
+  @IsOptional()
   website: string;
 }
 
 export class CreateGameDto extends OmitType(GameDto, [
   'id',
-  'platforms',
+  'parent_platforms',
   'genres',
 ]) {
   @ApiProperty({

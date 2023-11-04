@@ -23,3 +23,19 @@ export const gameGenres = [
     genre_id: '1f556ab5-4b96-4c1f-a38b-95b7545efa67',
   },
 ];
+
+export const gameDevelopers = [
+  {
+    id: 'd6c02b60-2017-4992-b8e7-9a1b57b6f072',
+    game_id: 'b86fa12a-76fc-46f5-8a3e-bf39e7be4c4e',
+    developer_id: 'aebc2eb5-5df2-4610-bccf-80e8a2413a69',
+  },
+];
+
+export const gamePublishers = [
+  {
+    id: '26fc8f99-48cc-4fc6-bfcd-77961948371c',
+    game_id: 'b86fa12a-76fc-46f5-8a3e-bf39e7be4c4e',
+    publisher_id: '73ed3433-8ae9-47cd-86bd-f881732ef40a',
+  },
+];

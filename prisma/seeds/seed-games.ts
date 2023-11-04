@@ -1,11 +1,21 @@
 import { PrismaClient } from '@prisma/client';
 import { seedData } from '../helpers';
-import { gameGenres, gamePlatforms, games } from '../seed-data';
+import {
+  gameDevelopers,
+  gameGenres,
+  gamePlatforms,
+  gamePublishers,
+  games,
+} from '../seed-data';
 
 export const seedGame = async (prisma: PrismaClient) => {
   await seedData(prisma, 'game', games);
 
-  await seedData(prisma, 'gamePlatforms', gamePlatforms);
+  await seedData(prisma, 'gamePlatform', gamePlatforms);
 
-  await seedData(prisma, 'gameGenres', gameGenres);
+  await seedData(prisma, 'gameGenre', gameGenres);
+
+  await seedData(prisma, 'gameDeveloper', gameDevelopers);
+
+  await seedData(prisma, 'gamePublisher', gamePublishers);
 };

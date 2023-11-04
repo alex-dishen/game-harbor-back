@@ -23,15 +23,23 @@ export class GamesService {
   }
 
   createGame(data: CreateGameDto) {
-    const { platformIds, genreIds, ...restData } = data;
+    const { platformIds, genreIds, developers, publishers, ...restData } = data;
 
     return this.gamesRepository.create({
       ...restData,
-      platforms: {
+      parent_platforms: {
         create: platformIds.map((id) => ({ platform: { connect: { id } } })),
       },
       genres: {
         create: genreIds.map((id) => ({ genre: { connect: { id } } })),
+      },
+      developers: {
+        create: developers.map((item) => ({
+          developer: { create: item },
+        })),
+      },
+      publishers: {
+        create: publishers.map((item) => ({ publisher: { create: item } })),
       },
     });
   }
