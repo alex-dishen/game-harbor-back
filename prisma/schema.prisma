@@ -16,7 +16,7 @@ model User {
   firstName  String
   lastName   String
 
-  games UserGames[]
+  games UserGame[]
 
   @@map("users")
 }
@@ -27,14 +27,14 @@ model Game {
   background_image String
   description_raw  String
   released         String
-  developers       String[]
-  publishers       String[]
-  website          String
+  website          String?
   created_at       DateTime @default(now())
 
-  users     UserGames[]
-  genres    GameGenres[]
-  platforms GamePlatforms[]
+  users            UserGame[]
+  genres           GameGenre[]
+  parent_platforms GamePlatform[]
+  developers       GameDeveloper[]
+  publishers       GamePublisher[]
 
   @@map("games")
 }
@@ -44,7 +44,7 @@ model Platform {
   name String
   slug String
 
-  games GamePlatforms[]
+  games GamePlatform[]
 
   @@map("platforms")
 }
@@ -53,12 +53,30 @@ model Genre {
   id   String @id @default(uuid()) @db.Uuid
   name String
 
-  game_genres GameGenres[]
+  game_genres GameGenre[]
 
   @@map("genres")
 }
 
-model UserGames {
+model Developer {
+  id   String @id @default(uuid()) @db.Uuid
+  name String
+
+  games GameDeveloper[]
+
+  @@map("developers")
+}
+
+model Publisher {
+  id   String @id @default(uuid()) @db.Uuid
+  name String
+
+  games GamePublisher[]
+
+  @@map("publishers")
+}
+
+model UserGame {
   id      String @id @default(uuid()) @db.Uuid
   game_id String @db.Uuid
   user_id String @db.Uuid
@@ -70,7 +88,7 @@ model UserGames {
   @@map("user_games")
 }
 
-model GameGenres {
+model GameGenre {
   id       String @id @default(uuid()) @db.Uuid
   game_id  String @db.Uuid
   genre_id String @db.Uuid
@@ -82,7 +100,7 @@ model GameGenres {
   @@map("game_genres")
 }
 
-model GamePlatforms {
+model GamePlatform {
   id          String @id @default(uuid()) @db.Uuid
   game_id     String @db.Uuid
   platform_id String @db.Uuid
@@ -92,4 +110,26 @@ model GamePlatforms {
 
   @@unique([game_id, platform_id])
   @@map("game_platforms")
+}
+
+model GameDeveloper {
+  id           String @id @default(uuid()) @db.Uuid
+  game_id      String @db.Uuid
+  developer_id String @db.Uuid
+
+  game      Game      @relation(fields: [game_id], references: [id])
+  developer Developer @relation(fields: [developer_id], references: [id])
+
+  @@map("game_developers")
+}
+
+model GamePublisher {
+  id           String  @id @default(uuid()) @db.Uuid
+  game_id      String? @db.Uuid
+  publisher_id String? @db.Uuid
+
+  game      Game?      @relation(fields: [game_id], references: [id])
+  publisher Publisher? @relation(fields: [publisher_id], references: [id])
+
+  @@map("game_publishers")
 }
