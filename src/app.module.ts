@@ -5,6 +5,7 @@ import { PrismaModule } from 'src/shared/prisma/prisma.module';
 import { GamesModule } from 'src/api/games/games.module';
 import { MappersModule } from 'src/shared/mappers/mapper.module';
 import { PlatformsModule } from 'src/api/platforms/platforms.module';
+import { GenresModule } from 'src/api/genres/genres.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PlatformsModule } from 'src/api/platforms/platforms.module';
     GamesModule,
     MappersModule,
     PlatformsModule,
+    GenresModule,
   ],
 })
 export class AppModule {}

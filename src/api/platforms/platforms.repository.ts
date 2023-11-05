@@ -10,7 +10,7 @@ export class PlatformsRepository {
     return this.prisma.platform.findMany();
   }
 
-  getById(where: Prisma.PlatformWhereUniqueInput) {
+  getBy(where: Prisma.PlatformWhereUniqueInput) {
     return this.prisma.platform.findUnique({ where });
   }
 
