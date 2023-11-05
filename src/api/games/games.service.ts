@@ -10,13 +10,13 @@ export class GamesService {
     private gamesMapper: GamesMapper,
   ) {}
 
-  async getAll() {
+  async getAllGames() {
     const games = await this.gamesRepository.getAll();
 
     return this.gamesMapper.toArrayDto(games);
   }
 
-  async getById(id: string) {
+  async getGameById(id: string) {
     const game = await this.gamesRepository.getById({ id });
 
     return this.gamesMapper.toDto(game);
