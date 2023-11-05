@@ -12,23 +12,26 @@ export class GamesController {
   @ApiResponse({ status: 200, type: [GameDto] })
   @Get('/all')
   getAllGames() {
-    return this.games.getAll();
+    return this.games.getAllGames();
   }
 
   @ApiOperation({ summary: 'Get a single game' })
+  @ApiResponse({ status: 200, type: GameDto })
   @Get('/:id')
   getGame(@Param('id') id: string) {
-    return this.games.getById(id);
+    return this.games.getGameById(id);
   }
 
   @ApiOperation({ summary: 'Create a new game' })
+  @ApiResponse({ status: 200, type: GameDto })
   @Post('/create')
   createGame(@Body() data: CreateGameDto) {
     return this.games.createGame(data);
   }
 
   @ApiOperation({ summary: 'Delete a game' })
-  @Delete('/delete/:id')
+  @ApiResponse({ status: 200, type: GameDto })
+  @Delete('/:id')
   deleteGame(@Param('id') id: string) {
     return this.games.deleteGame(id);
   }
