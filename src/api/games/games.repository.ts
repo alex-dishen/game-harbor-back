@@ -17,7 +17,7 @@ export class GamesRepository {
     });
   }
 
-  getById(where: Prisma.GameWhereUniqueInput) {
+  getBy(where: Prisma.GameWhereUniqueInput) {
     return this.prisma.game.findUnique({
       where,
       include: {

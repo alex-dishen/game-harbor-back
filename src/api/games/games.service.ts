@@ -17,7 +17,7 @@ export class GamesService {
   }
 
   async getGameById(id: string) {
-    const game = await this.gamesRepository.getById({ id });
+    const game = await this.gamesRepository.getBy({ id });
 
     return this.gamesMapper.toDto(game);
   }

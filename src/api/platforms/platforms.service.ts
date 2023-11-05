@@ -11,7 +11,7 @@ export class PlatformsService {
   }
 
   getPlatformById(id: string) {
-    return this.platformsRepository.getById({ id });
+    return this.platformsRepository.getBy({ id });
   }
 
   createPlatform(data: CreatePlatformDto) {
