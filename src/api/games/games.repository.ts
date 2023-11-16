@@ -9,10 +9,11 @@ export class GamesRepository {
   getAll() {
     return this.prisma.game.findMany({
       include: {
-        parent_platforms: { include: { platform: true } },
+        platforms: { include: { platform: true } },
         genres: { include: { genre: true } },
         developers: { include: { developer: true } },
         publishers: { include: { publisher: true } },
+        screenshots: true,
       },
     });
   }
@@ -21,7 +22,7 @@ export class GamesRepository {
     return this.prisma.game.findUnique({
       where,
       include: {
-        parent_platforms: { include: { platform: true } },
+        platforms: { include: { platform: true } },
         genres: { include: { genre: true } },
         developers: { include: { developer: true } },
         publishers: { include: { publisher: true } },
@@ -33,24 +34,28 @@ export class GamesRepository {
     return this.prisma.game.create({
       data,
       include: {
-        parent_platforms: { include: { platform: true } },
+        platforms: { include: { platform: true } },
         genres: { include: { genre: true } },
       },
     });
   }
 
   async delete(where: Prisma.GameWhereUniqueInput) {
+    await this.prisma.gameGenre.deleteMany({ where: { game_id: where.id } });
+
     await this.prisma.gamePlatform.deleteMany({
       where: { game_id: where.id },
     });
-
-    await this.prisma.gameGenre.deleteMany({ where: { game_id: where.id } });
 
     await this.prisma.gameDeveloper.deleteMany({
       where: { game_id: where.id },
     });
 
     await this.prisma.gamePublisher.deleteMany({
+      where: { game_id: where.id },
+    });
+
+    await this.prisma.screenshot.deleteMany({
       where: { game_id: where.id },
     });
 

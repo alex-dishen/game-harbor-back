@@ -7,11 +7,16 @@ type Game = {
   name: string;
   background_image: string;
   description_raw: string;
+  slug: string;
+  description: string;
+  added: number;
+  rating: number;
+  updated: string;
   released: string;
   website: string;
   developers: { developer: IdName }[];
   publishers: { publisher: IdName }[];
-  parent_platforms: { platform: IdName & { slug: string } }[];
+  platforms: { platform: IdName & { slug: string } }[];
   genres: { genre: IdName }[];
 };
 
@@ -22,9 +27,7 @@ export class GamesMapper {
   toDto(game: Game): GameDto {
     return {
       ...game,
-      parent_platforms: game.parent_platforms.map(
-        (platform) => platform.platform,
-      ),
+      platforms: game.platforms.map((platform) => platform.platform),
       genres: game.genres.map((genre) => genre.genre),
       developers: game.developers.map((developer) => developer.developer),
       publishers: game.publishers.map((publisher) => publisher.publisher),
