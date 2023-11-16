@@ -1,5 +1,12 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { IsArray, IsOptional, IsString, IsUUID, IsUrl } from 'class-validator';
+import {
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  IsUrl,
+} from 'class-validator';
 import { IdNameDto } from 'src/shared/dto';
 
 export class GameDto {
@@ -10,6 +17,10 @@ export class GameDto {
   @ApiProperty({ example: 'Forspoken' })
   @IsString()
   name: string;
+
+  @ApiProperty({ example: 'forspoken' })
+  @IsString()
+  slug: string;
 
   @ApiProperty({
     example:
@@ -24,6 +35,13 @@ export class GameDto {
   })
   @IsString()
   description_raw: string;
+
+  @ApiProperty({
+    example:
+      '<p>Project Athia is the culmination of Luminous Productions’ philosophy to create a completely new ...</p>',
+  })
+  @IsString()
+  description: string;
 
   @ApiProperty({ example: '2023-10-31T04:50:07.398Z' })
   @IsString()
@@ -58,7 +76,7 @@ export class GameDto {
     ],
   })
   @IsArray()
-  parent_platforms: { slug: string }[] & IdNameDto[];
+  platforms: { slug: string }[] & IdNameDto[];
 
   @ApiProperty({
     example: [{ id: '1f556ab5-4b96-4c1f-a38b-95b7545efa67', name: 'Action' }],
@@ -70,11 +88,27 @@ export class GameDto {
   @IsUrl()
   @IsOptional()
   website: string;
+
+  @ApiProperty({ example: 230 })
+  @IsNumber()
+  added: number;
+
+  @ApiProperty({ example: 30 })
+  @IsNumber()
+  rating: number;
+
+  @ApiProperty({ example: '2023-10-31T04:50:07.398Z' })
+  @IsString()
+  updated: string;
+
+  // @ApiProperty({ example: [{ id: '', image: '' }] })
+  // @IsArray()
+  // screenshots: { id: string; image: string }[];
 }
 
 export class CreateGameDto extends OmitType(GameDto, [
   'id',
-  'parent_platforms',
+  'platforms',
   'genres',
 ]) {
   @ApiProperty({
