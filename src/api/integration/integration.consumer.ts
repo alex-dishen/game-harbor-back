@@ -8,7 +8,7 @@ import {
 } from 'src/api/integration/types';
 import { IntegrationMapper } from 'src/api/integration/mapper';
 import { TimeService } from 'src/shared/time/time.service';
-import { QUEUE } from './constants';
+import { QUEUE } from 'src/api/integration/constants';
 
 @Processor(QUEUE.Integration)
 export class Consumer {

@@ -1,4 +1,4 @@
-import { RawgQueryParameters } from '../types';
+import { RawgQueryParameters } from 'src/api/integration/types';
 
 export type GetRawgDataArgs = {
   endpoint: string;

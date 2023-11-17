@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
 import { Producer } from 'src/api/integration/integration.producer';
-import { Consumer } from './integration.consumer';
-import { IntegrationController } from './integration.controller';
-import { QUEUE } from './constants';
+import { Consumer } from 'src/api/integration/integration.consumer';
+import { IntegrationController } from 'src/api/integration/integration.controller';
+import { QUEUE } from 'src/api/integration/constants';
 
 @Module({
   imports: [

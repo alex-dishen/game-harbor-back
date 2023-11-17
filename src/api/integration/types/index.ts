@@ -1,2 +1,2 @@
-export * from './functionArgs';
-export * from './games';
+export * from 'src/api/integration/types/functionArgs';
+export * from 'src/api/integration/types/games';

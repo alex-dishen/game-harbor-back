@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { RawgAllGamesResponse, RawgGameResponse } from '../types';
-import { getPrice } from '../../../shared/helpers';
+import {
+  RawgAllGamesResponse,
+  RawgGameResponse,
+} from 'src/api/integration/types';
+import { getPrice } from 'src/shared/helpers';
 
 @Injectable()
 export class IntegrationMapper {

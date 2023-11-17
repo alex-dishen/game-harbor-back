@@ -1,6 +1,6 @@
 import { Controller, Post } from '@nestjs/common';
-import { Consumer } from './integration.consumer';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Consumer } from 'src/api/integration/integration.consumer';
 
 @ApiTags('RAWG Integration')
 @Controller('integration')

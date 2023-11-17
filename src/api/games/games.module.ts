@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { GamesController } from './games.controller';
-import { GamesService } from './games.service';
-import { GamesRepository } from './games.repository';
+import { GamesController } from 'src/api/games/games.controller';
+import { GamesService } from 'src/api/games/games.service';
+import { GamesRepository } from 'src/api/games/games.repository';
 
 @Module({
   controllers: [GamesController],
