@@ -8,6 +8,7 @@ import { PlatformsModule } from 'src/api/platforms/platforms.module';
 import { GenresModule } from 'src/api/genres/genres.module';
 import { IntegrationModule } from 'src/api/integration/integration.module';
 import { TimeModule } from './shared/time/time.module';
+import { DevelopersModule } from './api/developers/developers.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TimeModule } from './shared/time/time.module';
     MappersModule,
     PlatformsModule,
     GenresModule,
+    DevelopersModule,
     IntegrationModule,
   ],
 })

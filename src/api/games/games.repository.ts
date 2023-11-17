@@ -35,7 +35,7 @@ export class GamesRepository {
     return this.prisma.game.create({ data });
   }
 
-  async delete(where: Prisma.GameWhereUniqueInput) {
+  delete(where: Prisma.GameWhereUniqueInput) {
     return this.prisma.$transaction([
       this.prisma.gameGenre.deleteMany({ where: { game_id: where.id } }),
       this.prisma.gamePlatform.deleteMany({ where: { game_id: where.id } }),
