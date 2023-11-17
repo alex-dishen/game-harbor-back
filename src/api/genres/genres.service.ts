@@ -6,6 +6,12 @@ import { CreateGenresDto } from 'src/api/genres/dto';
 export class GenresService {
   constructor(private genresRepository: GenresRepository) {}
 
+  async createGenre(data: CreateGenresDto) {
+    await this.genresRepository.create(data);
+
+    return { message: 'Genre is created' };
+  }
+
   getAllGenres() {
     return this.genresRepository.getAll();
   }
@@ -14,15 +20,15 @@ export class GenresService {
     return this.genresRepository.getBy({ id });
   }
 
-  createGenre(data: CreateGenresDto) {
-    return this.genresRepository.create(data);
+  async updateGenre(id: string, data: CreateGenresDto) {
+    await this.genresRepository.update({ where: { id }, data });
+
+    return { message: 'Genre is updated' };
   }
 
-  updateGenre(id: string, data: CreateGenresDto) {
-    return this.genresRepository.update({ where: { id }, data });
-  }
+  async deleteGenre(id: string) {
+    await this.genresRepository.delete({ id });
 
-  deleteGenre(id: string) {
-    return this.genresRepository.delete({ id });
+    return { message: 'Genre is deleted' };
   }
 }
