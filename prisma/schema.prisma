@@ -22,19 +22,19 @@ model User {
 }
 
 model Game {
-  id               String   @id @default(uuid()) @db.Uuid
-  name             String   @unique
-  slug             String
+  id               String    @id @default(uuid()) @db.Uuid
+  name             String    @unique
+  slug             String?
   background_image String
   description_raw  String
   released         String
   price            Float
-  added            Int
-  rating           Int
+  added            Int       @default(0)
+  rating           Int       @default(0)
   website          String?
-  description      String
-  updated          String
-  created_at       DateTime @default(now())
+  description      String?
+  updated          DateTime? @updatedAt
+  created_at       DateTime  @default(now())
 
   users       UserGame[]
   genres      GameGenre[]

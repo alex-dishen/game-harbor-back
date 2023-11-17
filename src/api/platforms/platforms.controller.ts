@@ -16,6 +16,13 @@ import { CreatePlatformDto, PlatformDto } from 'src/api/platforms/dto';
 export class PlatformsController {
   constructor(private platformsService: PlatformsService) {}
 
+  @ApiOperation({ summary: 'Create a platform' })
+  @ApiResponse({ status: 200, type: PlatformDto })
+  @Post('/create')
+  createPlatform(@Body() data: CreatePlatformDto) {
+    return this.platformsService.createPlatform(data);
+  }
+
   @ApiOperation({ summary: 'Get all platforms' })
   @ApiResponse({ status: 200, type: [PlatformDto] })
   @Get('/all')
@@ -28,13 +35,6 @@ export class PlatformsController {
   @Get('/:id')
   getGameById(@Param('id') id: string) {
     return this.platformsService.getPlatformById(id);
-  }
-
-  @ApiOperation({ summary: 'Create a platform' })
-  @ApiResponse({ status: 200, type: PlatformDto })
-  @Post('/create')
-  createPlatform(@Body() data: CreatePlatformDto) {
-    return this.platformsService.createPlatform(data);
   }
 
   @ApiOperation({ summary: 'Update a platform' })

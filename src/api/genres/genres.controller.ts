@@ -16,6 +16,13 @@ import { CreateGenresDto, GenresDto } from 'src/api/genres/dto';
 export class GenresController {
   constructor(private genresService: GenresService) {}
 
+  @ApiOperation({ summary: 'Create a genre' })
+  @ApiResponse({ status: 200, type: GenresDto })
+  @Post('/create')
+  createGenre(@Body() data: CreateGenresDto) {
+    return this.genresService.createGenre(data);
+  }
+
   @ApiOperation({ summary: 'Get all genres' })
   @ApiResponse({ status: 200, type: [GenresDto] })
   @Get('/all')
@@ -28,13 +35,6 @@ export class GenresController {
   @Get('/:id')
   getGenreById(@Param('id') id: string) {
     return this.genresService.getGenreById(id);
-  }
-
-  @ApiOperation({ summary: 'Create a genre' })
-  @ApiResponse({ status: 200, type: GenresDto })
-  @Post('/create')
-  createGenre(@Body() data: CreateGenresDto) {
-    return this.genresService.createGenre(data);
   }
 
   @ApiOperation({ summary: 'Update a genre' })

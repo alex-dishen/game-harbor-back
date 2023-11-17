@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { IdName } from 'src/shared/types';
+import { IdNameSlug } from 'src/shared/types';
 import { GameDto } from 'src/api/games/dto';
+import { omit } from 'src/shared/helpers';
 
 type Game = {
   id: string;
@@ -11,13 +12,16 @@ type Game = {
   description: string;
   added: number;
   rating: number;
-  updated: string;
+  updated: Date;
   released: string;
   website: string;
-  developers: { developer: IdName }[];
-  publishers: { publisher: IdName }[];
-  platforms: { platform: IdName & { slug: string } }[];
-  genres: { genre: IdName }[];
+  price: number;
+  created_at: Date;
+  developers: { developer: IdNameSlug }[];
+  publishers: { publisher: IdNameSlug }[];
+  platforms: { platform: IdNameSlug & { slug: string } }[];
+  genres: { genre: IdNameSlug }[];
+  screenshots: { id: string; image_url: string; game_id: string }[];
 };
 
 @Injectable()
@@ -26,11 +30,15 @@ export class GamesMapper {
 
   toDto(game: Game): GameDto {
     return {
-      ...game,
+      ...omit(game, ['updated', 'added', 'rating', 'created_at']),
       platforms: game.platforms.map((platform) => platform.platform),
       genres: game.genres.map((genre) => genre.genre),
       developers: game.developers.map((developer) => developer.developer),
       publishers: game.publishers.map((publisher) => publisher.publisher),
+      screenshots: game.screenshots.map(({ id, image_url }) => ({
+        id,
+        image_url,
+      })),
     };
   }
 

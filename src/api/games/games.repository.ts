@@ -26,39 +26,23 @@ export class GamesRepository {
         genres: { include: { genre: true } },
         developers: { include: { developer: true } },
         publishers: { include: { publisher: true } },
+        screenshots: true,
       },
     });
   }
 
   create(data: Prisma.GameCreateInput) {
-    return this.prisma.game.create({
-      data,
-      include: {
-        platforms: { include: { platform: true } },
-        genres: { include: { genre: true } },
-      },
-    });
+    return this.prisma.game.create({ data });
   }
 
   async delete(where: Prisma.GameWhereUniqueInput) {
-    await this.prisma.gameGenre.deleteMany({ where: { game_id: where.id } });
-
-    await this.prisma.gamePlatform.deleteMany({
-      where: { game_id: where.id },
-    });
-
-    await this.prisma.gameDeveloper.deleteMany({
-      where: { game_id: where.id },
-    });
-
-    await this.prisma.gamePublisher.deleteMany({
-      where: { game_id: where.id },
-    });
-
-    await this.prisma.screenshot.deleteMany({
-      where: { game_id: where.id },
-    });
-
-    return this.prisma.game.delete({ where });
+    return this.prisma.$transaction([
+      this.prisma.gameGenre.deleteMany({ where: { game_id: where.id } }),
+      this.prisma.gamePlatform.deleteMany({ where: { game_id: where.id } }),
+      this.prisma.gameDeveloper.deleteMany({ where: { game_id: where.id } }),
+      this.prisma.gamePublisher.deleteMany({ where: { game_id: where.id } }),
+      this.prisma.screenshot.deleteMany({ where: { game_id: where.id } }),
+      this.prisma.game.delete({ where }),
+    ]);
   }
 }

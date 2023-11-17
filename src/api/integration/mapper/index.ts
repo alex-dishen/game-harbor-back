@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { RawgAllGamesResponse, RawgGameResponse } from '../types';
-import { getPrice } from '../helpers';
+import { getPrice } from '../../../shared/helpers';
 
 @Injectable()
 export class IntegrationMapper {
@@ -26,7 +26,6 @@ export class IntegrationMapper {
         price: getPrice(game.added),
         added: fullGame.added,
         rating: fullGame.rating,
-        updated: fullGame.updated,
         platforms: {
           create: fullGame.parent_platforms.map(
             ({ platform: { name, slug } }) => ({

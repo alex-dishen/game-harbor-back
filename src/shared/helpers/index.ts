@@ -1,3 +1,12 @@
+export const omit = <Values, Key extends keyof Values>(
+  values: Values,
+  keys: Key[],
+): Omit<Values, Key> => {
+  return Object.fromEntries(
+    Object.entries(values).filter(([key]) => !keys.includes(key as Key)),
+  ) as Omit<Values, Key>;
+};
+
 export const getPrice = (added: number) => {
   let minPrice = 1;
   let maxPrice: number;
@@ -15,3 +24,6 @@ export const getPrice = (added: number) => {
 
   return roundedPrice;
 };
+
+export const transformText = (text: string) =>
+  text.toLowerCase().replace(/\s/g, '-');
