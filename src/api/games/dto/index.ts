@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsNumber,
@@ -7,7 +7,7 @@ import {
   IsUUID,
   IsUrl,
 } from 'class-validator';
-import { IdNameDto } from 'src/shared/dto';
+import { IdNameSlug } from 'src/shared/types';
 
 export class GameDto {
   @ApiProperty({ example: 'b86fa12a-76fc-46f5-8a3e-bf39e7be4c4e' })
@@ -47,24 +47,14 @@ export class GameDto {
   @IsString()
   released: string;
 
-  @ApiProperty({
-    example: [
-      {
-        id: '2474a226-ac3b-4b2f-a79c-70da86885af2',
-        name: 'Luminous Productions',
-      },
-    ],
-  })
-  @IsArray()
-  developers: IdNameDto[];
+  @ApiProperty({ example: 4.99 })
+  @IsNumber()
+  price: number;
 
-  @ApiProperty({
-    example: [
-      { id: '95d74c6b-5644-4dc5-8f08-fec05643703f', name: 'Square Enix' },
-    ],
-  })
-  @IsArray()
-  publishers: IdNameDto[];
+  @ApiProperty({ example: 'https://forspoken.square-enix-games.com/en-us/' })
+  @IsUrl()
+  @IsOptional()
+  website: string;
 
   @ApiProperty({
     example: [
@@ -76,41 +66,110 @@ export class GameDto {
     ],
   })
   @IsArray()
-  platforms: { slug: string }[] & IdNameDto[];
+  platforms: IdNameSlug[];
 
   @ApiProperty({
-    example: [{ id: '1f556ab5-4b96-4c1f-a38b-95b7545efa67', name: 'Action' }],
+    example: [
+      {
+        id: '1f556ab5-4b96-4c1f-a38b-95b7545efa67',
+        name: 'Action',
+        slug: 'action',
+      },
+    ],
   })
   @IsArray()
-  genres: IdNameDto[];
+  genres: IdNameSlug[];
+
+  @ApiProperty({
+    example: [
+      {
+        id: '2474a226-ac3b-4b2f-a79c-70da86885af2',
+        name: 'Luminous Productions',
+        slug: 'luminous-productions',
+      },
+    ],
+  })
+  @IsArray()
+  developers: IdNameSlug[];
+
+  @ApiProperty({
+    example: [
+      {
+        id: '95d74c6b-5644-4dc5-8f08-fec05643703f',
+        name: 'Square Enix',
+        slug: 'square-enix',
+      },
+    ],
+  })
+  @IsArray()
+  publishers: IdNameSlug[];
+
+  @ApiProperty({
+    example: [
+      {
+        id: '0b727b89-e8e0-4183-a4aa-50686040f47e',
+        image_url:
+          'https://media.rawg.io/media/screenshots/1ac/1ac19f31974314855ad7be266adeb500.jpg',
+      },
+    ],
+  })
+  @IsArray()
+  screenshots: { id: string; image_url: string }[];
+}
+
+export class CreateGameDto {
+  @ApiProperty({ example: 'Forspoken' })
+  @IsString()
+  name: string;
+
+  @ApiProperty({ example: 'forspoken' })
+  @IsString()
+  @IsOptional()
+  slug: string;
+
+  @ApiProperty({
+    example:
+      'https://media.rawg.io/media/games/3a0/3a074a80d9a45e82aff7532f0162628e.jpg',
+  })
+  @IsUrl()
+  background_image: string;
+
+  @ApiProperty({
+    example:
+      'Project Athia is the culmination of Luminous Productions’ philosophy to create a completely new ...',
+  })
+  @IsString()
+  description_raw: string;
+
+  @ApiProperty({ example: '2023-10-31T04:50:07.398Z' })
+  @IsString()
+  released: string;
 
   @ApiProperty({ example: 'https://forspoken.square-enix-games.com/en-us/' })
   @IsUrl()
   @IsOptional()
   website: string;
 
-  @ApiProperty({ example: 230 })
-  @IsNumber()
-  added: number;
+  @ApiProperty({
+    example: ['Luminous Productions'],
+  })
+  @IsArray()
+  developers: string[];
 
-  @ApiProperty({ example: 30 })
-  @IsNumber()
-  rating: number;
+  @ApiProperty({
+    example: ['Square Enix'],
+  })
+  @IsArray()
+  publishers: string[];
 
-  @ApiProperty({ example: '2023-10-31T04:50:07.398Z' })
-  @IsString()
-  updated: string;
+  @ApiProperty({
+    example: [
+      'https://media.rawg.io/media/screenshots/1ac/1ac19f31974314855ad7be266adeb500.jpg',
+    ],
+  })
+  @IsArray()
+  screenshots: string[];
 
-  // @ApiProperty({ example: [{ id: '', image: '' }] })
-  // @IsArray()
-  // screenshots: { id: string; image: string }[];
-}
-
-export class CreateGameDto extends OmitType(GameDto, [
-  'id',
-  'platforms',
-  'genres',
-]) {
   @ApiProperty({
     example: [
       '117c81cd-7132-4e67-b969-6d9a3e2d05df',

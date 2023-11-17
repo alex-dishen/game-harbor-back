@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { GamesRepository } from 'src/api/games/games.repository';
 import { GamesMapper } from 'src/api/games/mapper';
-// import { CreateGameDto } from 'src/api/games/dto';
+import { CreateGameDto } from 'src/api/games/dto';
+import { getPrice, transformText } from 'src/shared/helpers';
+import { MessageDto } from 'src/shared/dto';
 
 @Injectable()
 export class GamesService {
@@ -22,29 +24,64 @@ export class GamesService {
     return this.gamesMapper.toDto(game);
   }
 
-  // createGame(data: CreateGameDto) {
-  //   const { platformIds, genreIds, developers, publishers, ...restData } = data;
+  async createGame(data: CreateGameDto): Promise<MessageDto> {
+    const {
+      platformIds,
+      genreIds,
+      developers,
+      publishers,
+      screenshots,
+      ...restData
+    } = data;
 
-  //   return this.gamesRepository.create({
-  //     ...restData,
-  //     platforms: {
-  //       create: platformIds.map((id) => ({ platform: { connect: { id } } })),
-  //     },
-  //     genres: {
-  //       create: genreIds.map((id) => ({ genre: { connect: { id } } })),
-  //     },
-  //     developers: {
-  //       create: developers.map((item) => ({
-  //         developer: { create: item },
-  //       })),
-  //     },
-  //     publishers: {
-  //       create: publishers.map((item) => ({ publisher: { create: item } })),
-  //     },
-  //   });
-  // }
+    await this.gamesRepository.create({
+      ...restData,
+      price: getPrice(0),
+      platforms: {
+        create: platformIds.map((id) => ({ platform: { connect: { id } } })),
+      },
+      genres: {
+        create: genreIds.map((id) => ({ genre: { connect: { id } } })),
+      },
+      developers: {
+        create: developers.map((developerName) => ({
+          developer: {
+            connectOrCreate: {
+              where: { name: developerName },
+              create: {
+                name: developerName,
+                slug: transformText(developerName),
+              },
+            },
+          },
+        })),
+      },
+      publishers: {
+        create: publishers.map((publisherName) => ({
+          publisher: {
+            connectOrCreate: {
+              where: { name: publisherName },
+              create: {
+                name: publisherName,
+                slug: transformText(publisherName),
+              },
+            },
+          },
+        })),
+      },
+      screenshots: {
+        create: screenshots.map((image) => ({
+          image_url: image,
+        })),
+      },
+    });
 
-  deleteGame(id: string) {
-    return this.gamesRepository.delete({ id });
+    return { message: 'Game is created' };
+  }
+
+  async deleteGame(id: string) {
+    await this.gamesRepository.delete({ id });
+
+    return { message: 'Game is deleted' };
   }
 }
