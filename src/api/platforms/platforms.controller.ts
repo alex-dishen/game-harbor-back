@@ -10,6 +10,7 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PlatformsService } from 'src/api/platforms/platforms.service';
 import { CreatePlatformDto, PlatformDto } from 'src/api/platforms/dto';
+import { MessageDto } from 'src/shared/dto';
 
 @ApiTags('Platforms')
 @Controller('platforms')
@@ -17,7 +18,7 @@ export class PlatformsController {
   constructor(private platformsService: PlatformsService) {}
 
   @ApiOperation({ summary: 'Create a platform' })
-  @ApiResponse({ status: 200, type: PlatformDto })
+  @ApiResponse({ status: 200, type: MessageDto })
   @Post('/create')
   createPlatform(@Body() data: CreatePlatformDto) {
     return this.platformsService.createPlatform(data);
@@ -38,14 +39,14 @@ export class PlatformsController {
   }
 
   @ApiOperation({ summary: 'Update a platform' })
-  @ApiResponse({ status: 200, type: PlatformDto })
+  @ApiResponse({ status: 200, type: MessageDto })
   @Put('/:id')
   updatePlatform(@Param('id') id: string, @Body() data: CreatePlatformDto) {
     return this.platformsService.updatePlatform(id, data);
   }
 
   @ApiOperation({ summary: 'Delete a platform' })
-  @ApiResponse({ status: 200, type: PlatformDto })
+  @ApiResponse({ status: 200, type: MessageDto })
   @Delete('/:id')
   deletePlatform(@Param('id') id: string) {
     return this.platformsService.deletePlatform(id);
