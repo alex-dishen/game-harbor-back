@@ -79,7 +79,9 @@ export class GamesService {
     return { message: 'Game is created' };
   }
 
-  deleteGame(id: string) {
-    return this.gamesRepository.delete({ id });
+  async deleteGame(id: string) {
+    await this.gamesRepository.delete({ id });
+
+    return { message: 'Game is deleted' };
   }
 }
