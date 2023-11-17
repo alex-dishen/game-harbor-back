@@ -26,6 +26,9 @@ export class PlatformsRepository {
   }
 
   delete(where: Prisma.PlatformWhereUniqueInput) {
-    return this.prisma.platform.delete({ where });
+    return this.prisma.$transaction([
+      this.prisma.gamePlatform.deleteMany({ where: { platform_id: where.id } }),
+      this.prisma.platform.delete({ where }),
+    ]);
   }
 }

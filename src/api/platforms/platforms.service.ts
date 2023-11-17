@@ -6,8 +6,10 @@ import { CreatePlatformDto } from 'src/api/platforms/dto';
 export class PlatformsService {
   constructor(private platformsRepository: PlatformsRepository) {}
 
-  getAllPlatforms() {
-    return this.platformsRepository.getAll();
+  async getAllPlatforms() {
+    await this.platformsRepository.getAll();
+
+    return { message: 'Platform is created' };
   }
 
   getPlatformById(id: string) {
@@ -18,11 +20,15 @@ export class PlatformsService {
     return this.platformsRepository.create(data);
   }
 
-  updatePlatform(id: string, data: CreatePlatformDto) {
-    return this.platformsRepository.update({ where: { id }, data });
+  async updatePlatform(id: string, data: CreatePlatformDto) {
+    await this.platformsRepository.update({ where: { id }, data });
+
+    return { message: 'Platform is updated' };
   }
 
-  deletePlatform(id: string) {
-    return this.platformsRepository.delete({ id });
+  async deletePlatform(id: string) {
+    await this.platformsRepository.delete({ id });
+
+    return { message: 'Platform is deleted' };
   }
 }

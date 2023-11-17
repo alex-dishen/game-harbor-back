@@ -10,6 +10,7 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GenresService } from 'src/api/genres/genres.service';
 import { CreateGenresDto, GenresDto } from 'src/api/genres/dto';
+import { MessageDto } from 'src/shared/dto';
 
 @ApiTags('Genres')
 @Controller('genres')
@@ -17,7 +18,7 @@ export class GenresController {
   constructor(private genresService: GenresService) {}
 
   @ApiOperation({ summary: 'Create a genre' })
-  @ApiResponse({ status: 200, type: GenresDto })
+  @ApiResponse({ status: 200, type: MessageDto })
   @Post('/create')
   createGenre(@Body() data: CreateGenresDto) {
     return this.genresService.createGenre(data);
@@ -38,14 +39,14 @@ export class GenresController {
   }
 
   @ApiOperation({ summary: 'Update a genre' })
-  @ApiResponse({ status: 200, type: GenresDto })
+  @ApiResponse({ status: 200, type: MessageDto })
   @Put('/:id')
   updateGenre(@Param('id') id: string, @Body() data: CreateGenresDto) {
     return this.genresService.updateGenre(id, data);
   }
 
   @ApiOperation({ summary: 'Delete a game' })
-  @ApiResponse({ status: 200, type: GenresDto })
+  @ApiResponse({ status: 200, type: MessageDto })
   @Delete('/:id')
   deleteGenre(@Param('id') id: string) {
     return this.genresService.deleteGenre(id);

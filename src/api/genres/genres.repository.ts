@@ -26,6 +26,9 @@ export class GenresRepository {
   }
 
   delete(where: Prisma.GenreWhereUniqueInput) {
-    return this.prisma.genre.delete({ where });
+    return this.prisma.$transaction([
+      this.prisma.gameGenre.deleteMany({ where: { genre_id: where.id } }),
+      this.prisma.genre.delete({ where }),
+    ]);
   }
 }
