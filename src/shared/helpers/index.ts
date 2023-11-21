@@ -25,5 +25,5 @@ export const getPrice = (added: number) => {
   return roundedPrice;
 };
 
-export const transformText = (text: string) =>
+export const transformTitleToSlug = (text: string) =>
   text.toLowerCase().replace(/\s/g, '-');
