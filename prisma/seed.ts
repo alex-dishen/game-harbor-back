@@ -1,5 +1,11 @@
 import { PrismaClient } from '@prisma/client';
-import { developers, genres, platforms, publishers } from './seed-data';
+import {
+  developers,
+  genres,
+  platforms,
+  publishers,
+  screenshots,
+} from './seed-data';
 import { seedData } from './helpers';
 import { seedGame } from './seeds';
 
@@ -15,6 +21,8 @@ async function main() {
   await seedData(prisma, 'publisher', publishers);
 
   await seedGame(prisma);
+
+  await seedData(prisma, 'screenshot', screenshots);
 }
 
 main()
