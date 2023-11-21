@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GamesRepository } from 'src/api/games/games.repository';
 import { GamesMapper } from 'src/api/games/mapper';
 import { CreateGameDto } from 'src/api/games/dto';
-import { getPrice, transformText } from 'src/shared/helpers';
+import { getPrice, transformTitleToSlug } from 'src/shared/helpers';
 import { MessageDto } from 'src/shared/dto';
 
 @Injectable()
@@ -50,7 +50,7 @@ export class GamesService {
               where: { name: developerName },
               create: {
                 name: developerName,
-                slug: transformText(developerName),
+                slug: transformTitleToSlug(developerName),
               },
             },
           },
@@ -63,7 +63,7 @@ export class GamesService {
               where: { name: publisherName },
               create: {
                 name: publisherName,
-                slug: transformText(publisherName),
+                slug: transformTitleToSlug(publisherName),
               },
             },
           },

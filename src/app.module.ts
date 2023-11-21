@@ -9,6 +9,7 @@ import { GenresModule } from 'src/api/genres/genres.module';
 import { IntegrationModule } from 'src/api/integration/integration.module';
 import { TimeModule } from './shared/time/time.module';
 import { DevelopersModule } from './api/developers/developers.module';
+import { PublishersModule } from './api/publishers/publishers.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { DevelopersModule } from './api/developers/developers.module';
     PlatformsModule,
     GenresModule,
     DevelopersModule,
+    PublishersModule,
     IntegrationModule,
   ],
 })
