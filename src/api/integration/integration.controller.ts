@@ -12,7 +12,7 @@ export class IntegrationController {
   async integrateGames() {
     await this.consumer.fetchAndInsert({
       numberOfPages: 1,
-      params: { page_size: 2 },
+      params: { page_size: 15 },
     });
 
     return { message: 'Games are merged into you db' };
