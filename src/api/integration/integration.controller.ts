@@ -1,4 +1,4 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Consumer } from 'src/api/integration/integration.consumer';
 
@@ -9,10 +9,13 @@ export class IntegrationController {
 
   @ApiOperation({ summary: 'Fetch data from RAWG and insert into db' })
   @Post('integrate')
-  async integrateGames() {
+  async integrateGames(
+    @Query('number_of_pages') numberOfPages: number,
+    @Query('items_per_page') itemsPerPage: number,
+  ) {
     await this.consumer.fetchAndInsert({
-      numberOfPages: 1,
-      params: { page_size: 15 },
+      numberOfPages,
+      params: { page_size: itemsPerPage > 40 ? 40 : itemsPerPage },
     });
 
     return { message: 'Games are merged into you db' };

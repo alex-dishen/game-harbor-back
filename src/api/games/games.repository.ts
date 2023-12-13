@@ -1,13 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/shared/prisma/prisma.service';
+import { GamesOrderBy, OrderByOptions } from 'src/api/games/constants';
 
 @Injectable()
 export class GamesRepository {
   constructor(private prisma: PrismaService) {}
 
-  getAll() {
+  getAll(
+    params: {
+      skip: number;
+      orderBy: GamesOrderBy;
+      cursor: Prisma.GameWhereUniqueInput;
+    },
+    where: Prisma.GameWhereInput,
+  ) {
     return this.prisma.game.findMany({
+      where,
+      take: 20,
+      skip: params.skip,
+      orderBy: OrderByOptions[params.orderBy],
+      cursor: params.cursor,
       include: {
         platforms: { include: { platform: true } },
         genres: { include: { genre: true } },

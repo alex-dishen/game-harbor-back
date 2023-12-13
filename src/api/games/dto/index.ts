@@ -1,13 +1,16 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsArray,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   IsUUID,
   IsUrl,
 } from 'class-validator';
 import { IdNameSlug } from 'src/shared/types';
+import { GamesOrderBy } from 'src/api/games/constants';
+import { Prisma } from '@prisma/client';
 
 export class GameDto {
   @ApiProperty({ example: 'b86fa12a-76fc-46f5-8a3e-bf39e7be4c4e' })
@@ -115,6 +118,49 @@ export class GameDto {
   })
   @IsArray()
   screenshots: { id: string; image_url: string }[];
+}
+
+export class ResponseGamesDto {
+  @ApiProperty({
+    example: { added: 15000, id: '0b727b89-e8e0-4183-a4aa-50686040f47e' },
+  })
+  @IsObject()
+  cursor: Prisma.GameWhereUniqueInput;
+
+  @ApiProperty({
+    type: [GameDto],
+  })
+  @IsArray()
+  data: GameDto[];
+}
+
+export class GetGamesDto {
+  @ApiPropertyOptional({ enum: GamesOrderBy })
+  @IsString()
+  @IsOptional()
+  ordering?: GamesOrderBy;
+
+  @ApiPropertyOptional({ example: '3fd6ed32-91df-4e80-a0bc-3b737629b8ed' })
+  @IsString()
+  @IsOptional()
+  platform_id?: string;
+
+  @ApiPropertyOptional({ example: 'a8012df2-e744-4d84-bb0a-58feccb8603a' })
+  @IsString()
+  @IsOptional()
+  genre_id?: string;
+
+  @ApiPropertyOptional({ example: ['2018-01-26', '2020-12-10'] })
+  @IsArray()
+  @IsOptional()
+  dates?: string[];
+
+  @ApiPropertyOptional({
+    example: { name: 'Forspoken', id: 'b86fa12a-76fc-46f5-8a3e-bf39e7be4c4e' },
+  })
+  @IsObject()
+  @IsOptional()
+  cursor?: Prisma.GameWhereUniqueInput;
 }
 
 export class CreateGameDto {
