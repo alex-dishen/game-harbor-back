@@ -1,7 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GamesService } from 'src/api/games/games.service';
-import { CreateGameDto, GameDto } from 'src/api/games/dto';
+import {
+  CreateGameDto,
+  GameDto,
+  GetGamesDto,
+  ResponseGamesDto,
+} from 'src/api/games/dto';
 import { MessageDto } from 'src/shared/dto';
 
 @ApiTags('Games')
@@ -17,10 +22,10 @@ export class GamesController {
   }
 
   @ApiOperation({ summary: 'Get all games' })
-  @ApiResponse({ status: 200, type: [GameDto] })
-  @Get('/all')
-  getAllGames() {
-    return this.games.getAllGames();
+  @ApiResponse({ status: 200, type: ResponseGamesDto })
+  @Post('/all')
+  getAllGames(@Body() data: GetGamesDto) {
+    return this.games.getAllGames(data);
   }
 
   @ApiOperation({ summary: 'Get a single game' })

@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { GamesRepository } from 'src/api/games/games.repository';
 import { GamesMapper } from 'src/api/games/mapper';
-import { CreateGameDto } from 'src/api/games/dto';
+import {
+  CreateGameDto,
+  GetGamesDto,
+  ResponseGamesDto,
+} from 'src/api/games/dto';
 import { getPrice, transformTitleToSlug } from 'src/shared/helpers';
 import { MessageDto } from 'src/shared/dto';
+import { generateCursor } from 'src/api/games/helpers';
+import { GamesOrderBy } from 'src/api/games/constants';
 
 @Injectable()
 export class GamesService {
@@ -12,10 +18,30 @@ export class GamesService {
     private gamesMapper: GamesMapper,
   ) {}
 
-  async getAllGames() {
-    const games = await this.gamesRepository.getAll();
+  async getAllGames(params: GetGamesDto): Promise<ResponseGamesDto> {
+    const games = await this.gamesRepository.getAll(
+      {
+        orderBy: params.ordering || GamesOrderBy.Popularity,
+        skip: params.cursor ? 1 : 0,
+        cursor: params.cursor,
+      },
+      {
+        genres: { some: { genre_id: params.genre_id } },
+        platforms: { some: { platform_id: params.platform_id } },
+        released: {
+          lte: params.dates?.[1],
+          gte: params.dates?.[0],
+        },
+      },
+    );
 
-    return this.gamesMapper.toArrayDto(games);
+    return {
+      cursor: generateCursor(
+        params.ordering || GamesOrderBy.Popularity,
+        games[games.length - 1],
+      ),
+      data: this.gamesMapper.toArrayDto(games),
+    };
   }
 
   async getGameById(id: string) {
