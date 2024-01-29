@@ -17,11 +17,11 @@ CREATE TABLE "games" (
     "name" TEXT NOT NULL,
     "background_image" TEXT NOT NULL,
     "description_raw" TEXT NOT NULL,
-    "released" TIMESTAMP(3) NOT NULL,
+    "released" TEXT NOT NULL,
     "developers" TEXT[],
     "publishers" TEXT[],
     "website" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "games_pkey" PRIMARY KEY ("id")
 );
@@ -45,30 +45,42 @@ CREATE TABLE "genres" (
 
 -- CreateTable
 CREATE TABLE "user_games" (
+    "id" UUID NOT NULL,
     "game_id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
 
-    CONSTRAINT "user_games_pkey" PRIMARY KEY ("user_id","game_id")
+    CONSTRAINT "user_games_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "game_genres" (
+    "id" UUID NOT NULL,
     "game_id" UUID NOT NULL,
     "genre_id" UUID NOT NULL,
 
-    CONSTRAINT "game_genres_pkey" PRIMARY KEY ("game_id","genre_id")
+    CONSTRAINT "game_genres_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "game_platforms" (
+    "id" UUID NOT NULL,
     "game_id" UUID NOT NULL,
     "platform_id" UUID NOT NULL,
 
-    CONSTRAINT "game_platforms_pkey" PRIMARY KEY ("game_id","platform_id")
+    CONSTRAINT "game_platforms_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_games_user_id_game_id_key" ON "user_games"("user_id", "game_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "game_genres_game_id_genre_id_key" ON "game_genres"("game_id", "genre_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "game_platforms_game_id_platform_id_key" ON "game_platforms"("game_id", "platform_id");
 
 -- AddForeignKey
 ALTER TABLE "user_games" ADD CONSTRAINT "user_games_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
