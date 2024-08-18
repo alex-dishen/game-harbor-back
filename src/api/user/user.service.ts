@@ -10,8 +10,8 @@ export class UserService {
   constructor(private userRepository: UserRepository) {}
 
   async createUser(data: CreateUserDto): Promise<UserDto> {
-    const hashesPassword = await hash(data.password);
-    const updatedData = { ...data, password: hashesPassword };
+    const hashedPassword = await hash(data.password);
+    const updatedData = { ...data, password: hashedPassword };
 
     return this.userRepository.create(updatedData);
   }
@@ -34,8 +34,8 @@ export class UserService {
     let dataToUpdate = data;
 
     if (data.password) {
-      const hashesPassword = await hash(data.password);
-      dataToUpdate = { ...data, password: hashesPassword };
+      const hashedPassword = await hash(data.password);
+      dataToUpdate = { ...data, password: hashedPassword };
     }
 
     return this.userRepository.update(userId, dataToUpdate);
