@@ -48,7 +48,7 @@ export class UserService {
   }
 
   async softDeleteUser(userId: string): Promise<MessageDto> {
-    await this.userRepository.update(userId, { is_deleted: true });
+    await this.userRepository.update(userId, { isDeleted: true });
 
     return { message: 'Successfully soft deleted a user' };
   }

@@ -14,10 +14,10 @@ export class UserDto {
   _id?: Types.ObjectId;
 
   @ApiProperty({ example: 'John', description: 'Users first name' })
-  first_name: string;
+  firstName: string;
 
   @ApiProperty({ example: 'Smith', description: 'Users last name' })
-  last_name: string;
+  lastName: string;
 
   @ApiProperty({ example: 'john.smith@gmail.com', description: 'Users email' })
   email: string;
@@ -30,23 +30,23 @@ export class UserDto {
     example: '024-08-14T12:34:56.789Z',
     description: 'The date when user was created',
   })
-  created_at: Date;
+  createdAt: Date;
 
   @ApiProperty({
     example: false,
     description: 'Describes if user was deleted',
   })
-  is_deleted: boolean;
+  isDeleted: boolean;
 }
 
 export class CreateUserDto {
   @ApiProperty({ example: 'John', description: 'Users first name' })
   @IsString()
-  first_name: string;
+  firstName: string;
 
   @ApiProperty({ example: 'Smith', description: 'Users last name' })
   @IsString()
-  last_name: string;
+  lastName: string;
 
   @ApiProperty({ example: 'qwertY098!', description: 'Users password' })
   @IsStrongPassword()
@@ -59,7 +59,7 @@ export class CreateUserDto {
   })
   @IsStrongPassword()
   @Match<CreateUserDto>('password', { message: 'Passwords do not match' })
-  confirmation_password: string;
+  confirmationPassword: string;
 
   @ApiProperty({ example: 'john.smith@gmail.com', description: 'Users email' })
   @IsEmail()
@@ -75,12 +75,12 @@ export class UpdateUserDto {
   @ApiProperty({ example: 'John', description: 'Users first name' })
   @IsString()
   @IsOptional()
-  first_name: string;
+  firstName: string;
 
   @ApiProperty({ example: 'Smith', description: 'Users last name' })
   @IsString()
   @IsOptional()
-  last_name: string;
+  lastName: string;
 
   @ApiProperty({ example: 'qwertY098!', description: 'Users password' })
   @IsStrongPassword()

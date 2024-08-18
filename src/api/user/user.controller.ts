@@ -14,21 +14,21 @@ import { CreateUserDto, UpdateUserDto, UserDto } from './dto/user.dto';
 import { MessageDto } from 'src/shared/dto/message.dto';
 import { PaginatedResult, PaginationDto } from 'src/shared/dto/pagination.dto';
 
-@ApiTags('User')
-@Controller('user')
+@ApiTags('Users')
+@Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @ApiOperation({ summary: 'Create a user' })
   @ApiResponse({ status: 200, type: UserDto })
-  @Post('/create')
+  @Post()
   createUser(@Body() data: CreateUserDto): Promise<UserDto> {
     return this.userService.createUser(data);
   }
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, type: [UserDto] })
-  @Get('/all')
+  @Get()
   getAllUsers(
     @Query() pagination: PaginationDto,
   ): Promise<PaginatedResult<UserDto>> {
@@ -49,8 +49,16 @@ export class UserController {
     @Param('id') id: string,
     @Body() data: UpdateUserDto,
   ): Promise<UserDto> {
-    console.log(data);
     return this.userService.updateUser(id, data);
+  }
+
+  @ApiOperation({
+    summary: 'Soft delete a user, marks the user as deleted in the system',
+  })
+  @ApiResponse({ status: 200, type: MessageDto })
+  @Put('/:id/soft-delete')
+  softDeleteUser(@Param('id') id: string): Promise<MessageDto> {
+    return this.userService.softDeleteUser(id);
   }
 
   @ApiOperation({ summary: 'Delete a user' })
@@ -58,14 +66,5 @@ export class UserController {
   @Delete('/:id')
   deleteUser(@Param('id') id: string): Promise<MessageDto> {
     return this.userService.deleteUser(id);
-  }
-
-  @ApiOperation({
-    summary: 'Soft delete a user, marks the user as deleted in the system',
-  })
-  @ApiResponse({ status: 200, type: MessageDto })
-  @Delete('soft-delete/:id')
-  softDeleteUser(@Param('id') id: string): Promise<MessageDto> {
-    return this.userService.softDeleteUser(id);
   }
 }

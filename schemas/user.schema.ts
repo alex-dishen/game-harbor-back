@@ -9,10 +9,10 @@ export type UserDocumentWithoutPassword = Omit<User, 'password'> &
 @Schema()
 export class User {
   @Prop({ required: true })
-  first_name: string;
+  firstName: string;
 
   @Prop({ required: true })
-  last_name: string;
+  lastName: string;
 
   @Prop({ required: true, select: false })
   password: string;
@@ -24,10 +24,10 @@ export class User {
   phone?: string;
 
   @Prop({ default: Date.now })
-  created_at: Date;
+  createdAt: Date;
 
   @Prop({ default: false })
-  is_deleted: boolean;
+  isDeleted: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
