@@ -10,6 +10,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Game Harbor')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

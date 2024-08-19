@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt } from 'class-validator';
-import IsNullOrNumberDecorator from '../decorators/is_number_or_null_decorator';
+import IsNullOrNumberDecorator from '../decorators/is-number-or-null.decorator';
 import { Type } from 'class-transformer';
 import { IsOptional } from 'class-validator';
 

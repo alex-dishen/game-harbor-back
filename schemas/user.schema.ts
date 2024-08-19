@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 
-export type UserDocument = User & Document<Types.ObjectId>;
+export type UserDocument = HydratedDocument<User>;
 
-export type UserDocumentWithoutPassword = Omit<User, 'password'> &
-  Document<Types.ObjectId>;
+export type UserDocumentWithoutPassword = HydratedDocument<
+  Omit<User, 'password'>
+>;
 
 @Schema()
 export class User {
