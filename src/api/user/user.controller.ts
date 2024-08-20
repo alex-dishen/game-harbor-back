@@ -19,12 +19,12 @@ import { UserService } from './user.service';
 import { UpdateUserDto, UserDto } from './dto/user.dto';
 import { MessageDto } from 'src/shared/dto/message.dto';
 import { PaginatedResult, PaginationDto } from 'src/shared/dto/pagination.dto';
-import { JwtGuard } from '../auth/guard/jwt.guard';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
+import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 
 @ApiTags('Users')
 @ApiBearerAuth()
-@UseGuards(JwtGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
