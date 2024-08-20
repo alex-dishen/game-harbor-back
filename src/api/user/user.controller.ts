@@ -32,15 +32,15 @@ export class UserController {
   @ApiOperation({ summary: 'Get current user' })
   @ApiResponse({ status: 200, type: UserDto })
   @Get('/current')
-  getCurrentUser(@GetUser() user: UserDto): UserDto {
-    return user;
+  getCurrentUser(@GetUser('sub') userId: string): Promise<UserDto> {
+    return this.userService.getUser(userId);
   }
 
   @ApiOperation({ summary: 'Update current user' })
   @ApiResponse({ status: 200, type: UserDto })
   @Put('/current')
   updateCurrentUser(
-    @GetUser('id') userId: string,
+    @GetUser('sub') userId: string,
     @Body() data: UpdateUserDto,
   ) {
     return this.userService.updateUser(userId, data);
@@ -49,7 +49,7 @@ export class UserController {
   @ApiOperation({ summary: 'Delete current user' })
   @ApiResponse({ status: 200, type: MessageDto })
   @Delete('/current')
-  deleteCurrentUser(@GetUser('id') userId: string): Promise<MessageDto> {
+  deleteCurrentUser(@GetUser('sub') userId: string): Promise<MessageDto> {
     return this.userService.deleteUser(userId);
   }
 

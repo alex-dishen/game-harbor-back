@@ -1,24 +1,15 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { UserDocumentWithoutPassword } from 'schemas/user.schema';
+import { JwtPayloadT } from 'src/api/auth/types/types';
 
 export const GetUser = createParamDecorator(
   (
-    data:
-      | keyof UserDocumentWithoutPassword
-      | [keyof UserDocumentWithoutPassword]
-      | undefined,
+    data: keyof JwtPayloadT | undefined,
     ctx: ExecutionContext,
-  ) => {
+  ): Express.User => {
     const request = ctx.switchToHttp().getRequest();
 
-    if (!data) return request.user;
+    if (data) return request.user[data];
 
-    if (typeof data === 'string') return request.user[data];
-
-    const userValues = {};
-
-    data.map((value) => (userValues[value] = request.user[value]));
-
-    return userValues;
+    return request.user;
   },
 );

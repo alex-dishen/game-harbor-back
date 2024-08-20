@@ -5,7 +5,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { JwtName, JwtPayloadT } from '../types/types';
 import { UserRepository } from 'src/api/user/user.repository';
 import { EnvVariable } from 'src/shared/types/env';
-import { UserDocumentWithoutPassword } from 'schemas/user.schema';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, JwtName.JWT) {
@@ -19,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, JwtName.JWT) {
     });
   }
 
-  validate(payload: JwtPayloadT): Promise<UserDocumentWithoutPassword> {
-    return this.userRepository.getById(payload.sub);
+  validate(payload: JwtPayloadT): JwtPayloadT {
+    return payload;
   }
 }
