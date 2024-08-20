@@ -6,7 +6,7 @@ import {
   UserDocumentWithoutPassword,
 } from '../../../schemas/user.schema';
 import { FilterQuery, Model } from 'mongoose';
-import { CreateUserDto, UserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/user.dto';
 import { paginate } from 'src/shared/helpers/paginate';
 import { PaginatedResult } from 'src/shared/dto/pagination.dto';
 import { hash } from 'argon2';
@@ -15,14 +15,12 @@ import { hash } from 'argon2';
 export class UserRepository {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  async create(data: CreateUserDto): Promise<UserDto> {
+  async create(data: CreateUserDto): Promise<UserDocument> {
     const hashedPassword = await hash(data.password);
     const updatedData = { ...data, password: hashedPassword };
 
     const createdUser = new this.userModel(updatedData);
-    const savedUser = (await createdUser.save()).toJSON();
-
-    delete savedUser.password;
+    const savedUser = await createdUser.save();
 
     return savedUser;
   }
