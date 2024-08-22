@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import {
   IsEmail,
   IsOptional,
@@ -50,11 +50,20 @@ export class SingInDto {
   password: string;
 }
 
-export class JwtResponseDto {
+export class AuthDto {
   @ApiProperty({
     example:
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
     description: 'Access token that allows user to access the app',
   })
   accessToken: string;
+
+  @ApiProperty({
+    example:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+    description: 'Refresh token to renew access token',
+  })
+  refreshToken: string;
 }
+
+export class AccessTokenDto extends OmitType(AuthDto, ['refreshToken']) {}
