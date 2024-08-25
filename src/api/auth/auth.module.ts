@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserSession, UserSessionSchema } from 'schemas/user-session.schema';
 import { AuthRepository } from './auth.repository';
 import { CookieService } from './cookie.service';
+import { TokenService } from './token.service';
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { CookieService } from './cookie.service';
     JwtModule.register({ global: true }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository, CookieService],
+  providers: [AuthRepository, AuthService, CookieService, TokenService],
 })
 export class AuthModule {}
