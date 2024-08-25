@@ -4,26 +4,53 @@ import {
   Delete,
   Get,
   Param,
-  Post,
+  Patch,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto, UserDto } from './dto/user.dto';
+import { UpdateUserDto, UserDto } from './dto/user.dto';
 import { MessageDto } from 'src/shared/dto/message.dto';
 import { PaginatedResult, PaginationDto } from 'src/shared/dto/pagination.dto';
+import { GetUser } from 'src/shared/decorators/get-user.decorator';
+import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 
 @ApiTags('Users')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @ApiOperation({ summary: 'Create a user' })
+  @ApiOperation({ summary: 'Get current user' })
   @ApiResponse({ status: 200, type: UserDto })
-  @Post()
-  createUser(@Body() data: CreateUserDto): Promise<UserDto> {
-    return this.userService.createUser(data);
+  @Get('/current')
+  getCurrentUser(@GetUser('sub') userId: string): Promise<UserDto> {
+    return this.userService.getUser(userId);
+  }
+
+  @ApiOperation({ summary: 'Update current user' })
+  @ApiResponse({ status: 200, type: UserDto })
+  @Put('/current')
+  updateCurrentUser(
+    @GetUser('sub') userId: string,
+    @Body() data: UpdateUserDto,
+  ) {
+    return this.userService.updateUser(userId, data);
+  }
+
+  @ApiOperation({ summary: 'Delete current user' })
+  @ApiResponse({ status: 200, type: MessageDto })
+  @Delete('/current')
+  deleteCurrentUser(@GetUser('sub') userId: string): Promise<MessageDto> {
+    return this.userService.deleteUser(userId);
   }
 
   @ApiOperation({ summary: 'Get all users' })
@@ -56,7 +83,7 @@ export class UserController {
     summary: 'Soft delete a user, marks the user as deleted in the system',
   })
   @ApiResponse({ status: 200, type: MessageDto })
-  @Put('/:id/soft-delete')
+  @Patch('/:id/status')
   softDeleteUser(@Param('id') id: string): Promise<MessageDto> {
     return this.userService.softDeleteUser(id);
   }
