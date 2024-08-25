@@ -85,9 +85,10 @@ export class AuthController {
   async logout(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
+    @GetUser('sub') userId: string,
   ): Promise<MessageDto> {
     const refreshToken = this.cookieService.getRefreshTokenFromRequest(req);
-    const logOutResponse = await this.authService.logout(refreshToken);
+    const logOutResponse = await this.authService.logout(userId, refreshToken);
     this.cookieService.clearRefreshTokenCookie(res);
 
     return logOutResponse;

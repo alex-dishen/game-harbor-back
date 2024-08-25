@@ -38,13 +38,15 @@ export class TokenService {
 
     const decodedRefreshToken = await this.jwtService.decode(refreshToken);
 
-    let refreshExpiresAt = dayjs().add(10, 'days').toDate();
+    const expirationTime = dayjs.unix(
+      decodedRefreshToken?.exp || new Date(decodedRefreshToken.exp * 1000),
+    );
 
-    if (decodedRefreshToken?.exp) {
-      refreshExpiresAt = new Date(decodedRefreshToken.exp * 1000);
-    }
+    const currentTime = dayjs();
 
-    return { accessToken, refreshToken, refreshExpiresAt };
+    const expiresIn = expirationTime.diff(currentTime, 'second');
+
+    return { accessToken, refreshToken, refreshExpiresIn: expiresIn };
   }
 
   verifyRefreshToken(token: string): Promise<JwtPayloadT> {

@@ -26,14 +26,14 @@ export class AuthService {
   async signUp(data: SignUpDto): Promise<AuthDto> {
     const createdUser = await this.userRepository.create(data);
     const sessionsId = new Types.ObjectId();
-    const { accessToken, refreshToken, refreshExpiresAt } =
+    const { accessToken, refreshToken, refreshExpiresIn } =
       await this.tokenService.createTokens(createdUser.id, sessionsId);
 
-    await this.authRepository.createUserSession(
+    await this.authRepository.createOrUpdateUserSession(
+      createdUser.id,
       sessionsId,
       refreshToken,
-      createdUser.id,
-      refreshExpiresAt,
+      refreshExpiresIn,
     );
 
     return { accessToken, refreshToken };
@@ -49,14 +49,14 @@ export class AuthService {
     if (!passwordsMatch) throw new ForbiddenException('Credentials incorrect');
 
     const sessionsId = new Types.ObjectId();
-    const { accessToken, refreshToken, refreshExpiresAt } =
+    const { accessToken, refreshToken, refreshExpiresIn } =
       await this.tokenService.createTokens(user.id, sessionsId);
 
-    await this.authRepository.createUserSession(
+    await this.authRepository.createOrUpdateUserSession(
+      user.id,
       sessionsId,
       refreshToken,
-      user.id,
-      refreshExpiresAt,
+      refreshExpiresIn,
     );
 
     return { accessToken, refreshToken };
@@ -76,7 +76,7 @@ export class AuthService {
       await this.tokenService.verifyRefreshToken(refreshToken);
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
-        await this.authRepository.deleteUserSession(sessionId);
+        await this.authRepository.deleteUserSession(userId, sessionId);
 
         throw new UnauthorizedException({
           message: 'JWT token is no longer valid',
@@ -88,24 +88,29 @@ export class AuthService {
       });
     }
 
-    const userSession = await this.authRepository.getUserSessionById(sessionId);
+    const userRefreshToken = await this.authRepository.getUserSessionById(
+      userId,
+      sessionId,
+    );
 
-    if (!userSession) throw new ForbiddenException('Access denied');
+    if (!userRefreshToken) throw new ForbiddenException('Access denied');
 
-    const refreshTokenMatch = await verify(userSession.token, refreshToken);
+    const refreshTokenMatch = await verify(userRefreshToken, refreshToken);
 
     if (!refreshTokenMatch) throw new ForbiddenException('Access denied');
 
     const {
       accessToken,
       refreshToken: newRefreshToken,
-      refreshExpiresAt,
+      refreshExpiresIn,
     } = await this.tokenService.createTokens(userId, sessionId);
 
-    await this.authRepository.updateUserSession(sessionId, {
-      token: newRefreshToken,
-      expiresAt: refreshExpiresAt,
-    });
+    await this.authRepository.createOrUpdateUserSession(
+      userId,
+      sessionId,
+      newRefreshToken,
+      refreshExpiresIn,
+    );
 
     return {
       accessToken: accessToken,
@@ -113,7 +118,7 @@ export class AuthService {
     };
   }
 
-  async logout(refreshToken?: string): Promise<MessageDto> {
+  async logout(userId: string, refreshToken: string): Promise<MessageDto> {
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh token not found');
     }
@@ -121,7 +126,7 @@ export class AuthService {
     const decoded = await this.jwtService.decode(refreshToken);
     const sessionId = decoded['sub'];
 
-    await this.authRepository.deleteUserSession(sessionId);
+    await this.authRepository.deleteUserSession(userId, sessionId);
 
     return { message: 'Successfully logged out' };
   }

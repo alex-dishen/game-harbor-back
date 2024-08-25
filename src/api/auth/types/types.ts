@@ -5,5 +5,5 @@ export type JwtPayloadT = {
 export type CreateTokensResponse = {
   accessToken: string;
   refreshToken: string;
-  refreshExpiresAt: Date;
+  refreshExpiresIn: number;
 };

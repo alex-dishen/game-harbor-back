@@ -1,51 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { hash } from 'argon2';
-import { Model, Types } from 'mongoose';
-import { UserSession, UserSessionDocument } from 'schemas/user-session.schema';
+import { Types } from 'mongoose';
+import { RedisService } from '../redis/redis.service';
+import { getRefreshTokenKey } from './helpers/get-refresh-token-key';
 
 @Injectable()
 export class AuthRepository {
-  constructor(
-    @InjectModel(UserSession.name) private userSessionModel: Model<UserSession>,
-  ) {}
+  constructor(private redisService: RedisService) {}
 
-  getUserSessionById(id: string): Promise<UserSessionDocument> {
-    return this.userSessionModel.findById(id);
-  }
-
-  async createUserSession(
-    id: Types.ObjectId,
-    token: string,
+  getUserSessionById(
     userId: string,
-    expiresAt: Date,
-  ): Promise<UserSessionDocument> {
-    const hashedToken = await hash(token);
-
-    const userSession = new this.userSessionModel({
-      userId,
-      _id: id,
-      expiresAt,
-      token: hashedToken,
-    });
-    return userSession.save();
-  }
-
-  async updateUserSession(
     sessionId: string,
-    data: Partial<UserSession>,
-  ): Promise<UserSessionDocument> {
-    const { token, ...restData } = data;
-    const hashedRefreshToken = await hash(token);
+  ): Promise<string | null> {
+    const refreshTokenKey = getRefreshTokenKey(userId, sessionId);
 
-    return this.userSessionModel.findByIdAndUpdate(
-      sessionId,
-      { ...restData, token: hashedRefreshToken },
-      { new: true },
-    );
+    return this.redisService.get(refreshTokenKey);
   }
 
-  deleteUserSession(sessionId: string): Promise<UserSessionDocument> {
-    return this.userSessionModel.findByIdAndDelete(sessionId);
+  async createOrUpdateUserSession(
+    userId: string,
+    sessionId: string | Types.ObjectId,
+    token: string,
+    expiresInSeconds: number,
+  ): Promise<void> {
+    const hashedToken = await hash(token);
+    const refreshTokenKey = getRefreshTokenKey(userId, sessionId.toString());
+
+    await this.redisService.set(refreshTokenKey, hashedToken, expiresInSeconds);
+  }
+
+  async deleteUserSession(userId: string, sessionId: string): Promise<void> {
+    const refreshTokenKey = getRefreshTokenKey(userId, sessionId);
+
+    await this.redisService.del(refreshTokenKey);
   }
 }
